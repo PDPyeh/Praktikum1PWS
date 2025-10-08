@@ -17,11 +17,19 @@
       <button id="getBtn">GET</button>
     </div>
     <hr>
-    <div id="tampilan"></div>
+    <div id="tampilan">
+      <p>Negara: -</p>
+      <p>Provinsi: -</p>
+      <p>Kecamatan: -</p>
+      <p>Suhu: -</p>
+      <p>Longitude: -</p>
+      <p>Latitude: -</p>
+    </div>
+    </div>
 
     <script>
-        $(document).ready(function () {
-        $("#getBtn").click(function () {
+    $(document).ready(function () {
+  $("#getBtn").click(function () {
     const lokasiInput = $("#inputLokasi").val().trim();
     const apiKey = "45c648cdebdc45ee9b063949250810"; // key lu
     const urlapi = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lokasiInput}&aqi=no`;
@@ -30,24 +38,31 @@
       alert("Masukkan nama kota dulu!");
       return;
     }
+
     $.ajax({
-        url: urlapi,
-        method: "GET",
-        success: function(data) {
-            console.log(data);
-            const v =  document.getElementById("tampilan");
-            const l = document.getElementById("lokasi");
+      url: urlapi,
+      method: "GET",
+      success: function (data) {
+        console.log(data);
 
-            let suhu = data.current.temp_c;
-            let lokasi = data.location.name;
-
-            v.innerHTML = suhu;
-            l.innerHTML = lokasi;
-        },
-        fail: function(error) {
-            console.log(error);
-        }
+        const tampil = `
+          <p>Negara: ${data.location.country}</p>
+          <p>Provinsi: ${data.location.region}</p>
+          <p>Kecamatan: ${data.location.name}</p>
+          <p>Suhu: ${data.current.temp_c} °C</p>
+          <p>Longitude: ${data.location.lon}</p>
+          <p>Latitude: ${data.location.lat}</p>
+        `;
+        $("#tampilan").html(tampil);
+      },
+      error: function (err) {
+        $("#tampilan").html(`<p style="color:red;">Lokasi tidak ditemukan!</p>`);
+        console.error(err);
+      }
     });
+  });
+});
+
     </script>
 </body>
 
