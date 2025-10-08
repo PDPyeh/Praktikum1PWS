@@ -15,51 +15,110 @@
       <input type="text" id="inputLokasi" placeholder="Masukkan nama kota">
       <button id="getBtn">GET</button>
     </div>
+    <div class="temp-display">
+      <div id="lokasi" class="lokasi">—</div>
+      <div id="suhuBesar" class="suhu-besar">—°C</div>
+    </div>
     <hr>
     <div id="tampilan">
       <p>Negara: -</p>
       <p>Provinsi: -</p>
       <p>Kecamatan: -</p>
-      <p>Suhu: -</p>
       <p>Longitude: -</p>
       <p>Latitude: -</p>
     </div>
     </div>
 
     <script>
-    $(document).ready(function () {
-  $("#getBtn").click(function () {
-    const lokasiInput = $("#inputLokasi").val().trim();
-    const apiKey = "45c648cdebdc45ee9b063949250810"; // key lu
-    const urlapi = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lokasiInput}&aqi=no`;
+    $(function () {
+  const apiKey = "45c648cdebdc45ee9b063949250810";
+  const $btn = $("#getBtn");
+  const $input = $("#inputLokasi");
 
-    if (lokasiInput === "") {
-      alert("Masukkan nama kota dulu!");
-      return;
-    }
+  $btn.on("click", fetchWeather);
+  $input.on("keydown", (e) => { if (e.key === "Enter") fetchWeather(); });
+
+  function fetchWeather() {
+    const q = $input.val().trim();
+    if (!q) { alert("Masukkan nama kota dulu!"); return; }
+
+    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(q)}&aqi=no`;
 
     $.ajax({
-      url: urlapi,
-      method: "GET",
-      success: function (data) {
-        console.log(data);
-
-        const tampil = `
-          <p>Negara: ${data.location.country}</p>
-          <p>Provinsi: ${data.location.region}</p>
-          <p>Kecamatan: ${data.location.name}</p>
-          <p>Suhu: ${data.current.temp_c} °C</p>
-          <p>Longitude: ${data.location.lon}</p>
-          <p>Latitude: ${data.location.lat}</p>
-        `;
-        $("#tampilan").html(tampil);
-      },
-      error: function (err) {
-        $("#tampilan").html(`<p style="color:red;">Lokasi tidak ditemukan!</p>`);
-        console.error(err);
-      }
+      url, method: "GET",
+      success: (data) => render(data),
+      error: () => $("#tampilan").html(`<p style="color:red;">Lokasi tidak ditemukan / error jaringan.</p>`)
     });
-  });
+  }
+
+  function render(data){
+    // suhu besar di atas + nama lokasi
+    $("#lokasi").text(`${data.location.name}, ${data.location.region}`);
+    $("#suhuBesar").text(`${data.current.temp_c}°C`);
+
+    // detail tanpa kondisi cuaca
+    const html = `
+      <p>Negara: ${data.location.country}</p>
+      <p>Provinsi: ${data.location.region}</p>
+      <p>Kecamatan: ${data.location.name}</p>
+      <p>Longitude: ${data.location.lon}</p>
+      <p>Latitude: ${data.location.lat}</p>
+    `;
+    $("#tampilan").html(html);
+
+    
+    applyPalette(pickPalette(data.current.condition));
+  }
+
+  
+  function pickPalette(condition){
+    const t = (condition?.text || "").toLowerCase();
+    const code = condition?.code || 0;
+
+    const isRainy =
+      /rain|drizzle|shower|thunder|storm|sleet/.test(t) ||
+      [1063,1069,1072,1150,1153,1180,1183,1186,1189,1192,1195,1198,1201,1273,1276,1240,1243,1246].includes(code);
+
+    const isSunny =
+      /sunny|clear/.test(t) ||
+      [1000].includes(code);
+
+    if (isRainy)   return "rainy";
+    if (isSunny)   return "sunny";
+    return "neutral";
+  }
+
+  
+  function applyPalette(name){
+    const root = document.documentElement;
+    let primary, dark, light, text;
+
+    if (name === "rainy"){
+      
+      primary = "#70F3FF";  
+      dark    = "#003152";  
+      light   = "#EBF6F7";  
+      text    = "#0f172a";
+    } else if (name === "sunny"){
+      
+      primary = "#ff8a00";  
+      dark    = "#373A3E";  
+      light   = "#fff2df";  
+      text    = "#1f2937";
+    } else {
+      
+      primary = "#89f7fe";
+      dark    = "#66a6ff";
+      light   = "#ffffff";
+      text    = "#0f172a";
+    }
+
+    root.style.setProperty("--primary", primary);
+    root.style.setProperty("--dark", dark);
+    root.style.setProperty("--light", light);
+    root.style.setProperty("--text", text);
+    root.style.setProperty("--btn", primary);
+  }
 });
 
     </script>

@@ -1,56 +1,90 @@
 @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 
-body {
-  font-family: 'SF Pro Display','Helvetica Neue', sans-serif;
-  background: linear-gradient(135deg, #e1ff5bff, #f8f6dfff);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+/* ===== THEME VARIABLES (akan diubah dari JS) ===== */
+:root{
+  --primary: #89f7fe;   /* default */
+  --dark:    #66a6ff;
+  --light:   #ffffff;
+  --text:    #0f172a;
+  --btn:     var(--primary);
+}
+
+/* ===== LAYOUT ===== */
+*{ box-sizing: border-box; }
+body{
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans','Helvetica Neue', sans-serif;
+  min-height: 100vh;
   margin: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--primary), var(--dark));
+  transition: background 300ms ease;
 }
 
-.container {
-  background: white;
-  padding: 20px 30px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  width: 320px;
-  text-align: center;
+.container{
+  width: min(92vw, 380px);
+  background: var(--light);
+  color: var(--text);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  padding: 22px 24px;
 }
 
-.input-group {
+h2{ margin: 0 0 10px; font-weight: 700; letter-spacing: .3px; }
+
+.input-group{
+  display: flex;
+  gap: 8px;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 65%;
-}
+.input-group label{ font-size: 14px; }
 
-button {
-  padding: 8px 12px;
-  background: #d9ff30ff;
-  color: white;
+.input-group input{
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  outline: none;
+  font: inherit;
+}
+.input-group input:focus{ border-color:#94a3b8; }
+
+.input-group button{
+  padding: 10px 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
+  background: var(--btn);
+  color: #fff;
+  font: inherit;
   cursor: pointer;
-  margin-left: 5px;
-  margin-top: 5px;
+  transition: filter 150ms ease;
+}
+.input-group button:hover{ filter: brightness(.92); }
+
+.temp-display{
+  text-align: center;
+  padding: 12px 8px 2px;
+}
+.lokasi{
+  font-size: 16px;
+  opacity: .8;
+  margin-bottom: 2px;
+}
+.suhu-besar{
+  font-size: clamp(44px, 9vw, 64px); /* gede */
+  font-weight: 800;
+  line-height: 1;
 }
 
-button:hover {
-  background: #f8ca68ff;
+hr{
+  border: none;
+  height: 1px;
+  background: #e5e7eb;
+  margin: 14px 0;
 }
 
-#tampilan {
-  margin-top: 15px;
-  text-align: left;
-  font-size: 14px;
-}
-
-#tampilan p {
-  margin: 4px 0;
-}
+.detail{ font-size: 15px; line-height: 1.45; }
+.detail p{ margin: 6px 0; }
