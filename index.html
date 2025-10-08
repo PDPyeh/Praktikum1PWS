@@ -20,7 +20,16 @@
     <div id="tampilan"></div>
 
     <script>
-        const urlapi = "http://api.weatherapi.com/v1/current.json?key=45c648cdebdc45ee9b063949250810&q=Yogyakarta&aqi=no";
+        $(document).ready(function () {
+        $("#getBtn").click(function () {
+    const lokasiInput = $("#inputLokasi").val().trim();
+    const apiKey = "45c648cdebdc45ee9b063949250810"; // key lu
+    const urlapi = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lokasiInput}&aqi=no`;
+
+    if (lokasiInput === "") {
+      alert("Masukkan nama kota dulu!");
+      return;
+    }
     $.ajax({
         url: urlapi,
         method: "GET",
