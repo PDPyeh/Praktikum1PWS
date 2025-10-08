@@ -1,0 +1,56 @@
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
+body {
+  font-family: 'SF Pro Display','Helvetica Neue', sans-serif;
+  background: linear-gradient(135deg, #e1ff5bff, #f8f6dfff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  width: 320px;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 65%;
+}
+
+button {
+  padding: 8px 12px;
+  background: #d9ff30ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+button:hover {
+  background: #f8ca68ff;
+}
+
+#tampilan {
+  margin-top: 15px;
+  text-align: left;
+  font-size: 14px;
+}
+
+#tampilan p {
+  margin: 4px 0;
+}
